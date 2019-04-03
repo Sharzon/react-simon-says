@@ -1,0 +1,44 @@
+.light-button {
+    width: 200px;
+    height: 150px;
+}
+
+.light-button-red,
+.locked .light-button.light-button-red {
+    background-color: #e61610
+}
+
+.light-button-red:active,
+.locked .light-button.light-button-red.on {
+    background-color: #bd0600
+}
+
+.light-button-green,
+.locked .light-button.light-button-green {
+    background-color: #92d36e
+}
+
+.light-button-green:active,
+.locked .light-button.light-button-green.on {
+    background-color: #5fe418
+}
+
+.light-button-blue,
+.locked .light-button.light-button-blue {
+    background-color: #1464f6
+}
+
+.light-button-blue:active,
+.locked .light-button.light-button-blue.on {
+    background-color: #0041bb
+}
+
+.light-button-yellow,
+.locked .light-button.light-button-yellow {
+    background-color: #fefb64
+}
+
+.light-button-yellow:active,
+.locked .light-button.light-button-yellow.on {
+    background-color: #f0ec00
+}
