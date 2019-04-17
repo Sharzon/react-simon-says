@@ -8,7 +8,6 @@ import './style.css'
 class Board extends Component {
   render () {
     const className = this.props.buttonsAreLocked ? "locked" : ""
-    // const buttonsAreLocked = this.areButtonsLocked()
 
     return (
       <table className={className}>
@@ -68,14 +67,14 @@ class Board extends Component {
       green: "4.mp3"
     }
 
-    (new Audio('sounds/' + sounds[button])).play()
-  }
+    const sound = document.createElement('audio')
+    sound.setAttribute('autoplay', true)
+    sound.setAttribute('src', `sounds/${sounds[button]}`)
 
-  // areButtonsLocked = () => !this.props.buttonsOrder.length
+    document.body.append(sound)
+  }
 }
 
 const mapStateToProps = ({ buttonsAreLocked }) => ({ buttonsAreLocked })
 
 export default connect(mapStateToProps)(Board)
-
-// export default Board

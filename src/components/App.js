@@ -4,16 +4,14 @@ import {
   lockButtons,
   unlockButtons,
   changeLevel,
-  addButton,
-  clearOrder,
-  setMoves,
-  removeMove,
-  clearMoves
+  startGame,
+  stopGame,
+  makeMove
 } from "../store/actions"
 
 import Board from "./Board"
 
-import '../styles/App.css'
+import './style.css'
 
 class App extends Component {
   constructor(props) {
@@ -26,7 +24,7 @@ class App extends Component {
     const round = this.props.buttonsOrder.length
 
     return (
-      <div>
+      <div className="center-text">
         <h1>Simon the Game</h1>
         <h2>Round: {round}</h2>
         <label>
@@ -41,16 +39,18 @@ class App extends Component {
           ref={this.board}
           currentLight={this.state.currentLight}
           onButtonClick={this.makeMove} />
-        <button onClick={this.startGame}>Start game</button>
+        <button onClick={this.props.startGame}>Start game</button>
       </div>
     )
   }
 
-  startGame = () => {
-    this.props.clearOrder()
-    this.addRandomButton()
-    this.showSequence()
-    // this.props.unlockButtons()
+  componentDidUpdate (prevProps) {
+    if (
+      this.props.buttonsOrder !== prevProps.buttonsOrder &&
+      this.props.buttonsOrder.length
+    ) {
+      this.showSequence()
+    }
   }
 
   changeLevel = (event) => {
@@ -60,53 +60,44 @@ class App extends Component {
       )
   }
 
-  addRandomButton = () => {
-    const min = 0,
-      max = 3
-    
-    let rand = min + Math.random() * (max + 1 - min);
-    rand = Math.floor(rand);
-
-    this.props.addButton(
-      ["red", "green", "blue", "yellow"][rand]
-    )
-    this.props.setMoves(this.props.buttonsOrder)
-  }
-
   makeMove = move => {
     if (this.props.buttonsAreBlocked) {
       return
     }
 
-    if (this.props.moves[0] === move) {
-      this.props.removeMove()
-      if (!this.props.moves.length) {
-        this.addRandomButton()
-        this.showSequence()
-      }
+    if (this.props.buttonsOrder[this.props.moveNumber] === move) {
+      this.props.makeMove()
     } else {
-      this.props.clearMoves()
-      this.props.clearOrder()
-      this.props.lockButtons()
+      this.props.stopGame()
     }
   }
 
-  showSequence = () => {
+  showSequence = async () => {
     this.props.lockButtons()
     const delay = this.getDelay(this.props.level)
+
+    const order = this.props.buttonsOrder
     
-    for (let button in this.props.buttonsOrder) {
-      this.setState({ currentLight: button })
-      console.log(this.state.currentLight)
-      setTimeout(() => {
-        this.setState({ currentLight: null })
-      }, delay)
-    }
-    this.props.unlockButtons()
+    const turnOnButton = i => (
+      () => {
+        this.setState({ currentLight: null }, () => {
+          if (i < order.length) {
+            this.setState(
+              { currentLight: order[i] },
+              () => { setTimeout(turnOnButton(i + 1), delay) }
+            )
+          } else {
+            this.props.unlockButtons()
+          }
+        })
+      }
+    )
+
+    setTimeout(turnOnButton(0), delay)
   }
 
   getDelay = level => {
-    switch (this.props.level) {
+    switch (level) {
       case "easy":
         return 1500
       case "medium":
@@ -122,13 +113,11 @@ class App extends Component {
 export default connect(
   state => state,
   { 
+    startGame,
+    changeLevel,
     lockButtons,
     unlockButtons,
-    changeLevel,
-    addButton,
-    clearOrder,
-    setMoves,
-    removeMove,
-    clearMoves
+    makeMove,
+    stopGame
   }
 )(App)

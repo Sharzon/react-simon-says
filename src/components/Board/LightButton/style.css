@@ -9,6 +9,7 @@
 }
 
 .light-button-red:active,
+.light-button.light-button-red.on,
 .locked .light-button.light-button-red.on {
     background-color: #bd0600
 }
@@ -19,6 +20,7 @@
 }
 
 .light-button-green:active,
+.light-button.light-button-green.on,
 .locked .light-button.light-button-green.on {
     background-color: #5fe418
 }
@@ -29,6 +31,7 @@
 }
 
 .light-button-blue:active,
+.light-button.light-button-blue.on,
 .locked .light-button.light-button-blue.on {
     background-color: #0041bb
 }
@@ -39,6 +42,7 @@
 }
 
 .light-button-yellow:active,
+.light-button.light-button-yellow.on,
 .locked .light-button.light-button-yellow.on {
     background-color: #f0ec00
 }
